@@ -41,3 +41,5 @@ apps/web/dist/
 worktrees/
 .agents/worktrees/
 .typert-*/
+.pnpm-store-win/
+.pnpm-store-debian/
