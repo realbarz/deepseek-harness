@@ -1,5 +1,6 @@
 CLAUDE.local.md
 .env
+.dsh-ollama*/
 node_modules/
 lib/
 *.tsbuildinfo
