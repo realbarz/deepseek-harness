@@ -235,6 +235,8 @@ export class FakeApiClient {
         page: request => this.page(request),
         follow: (request, signal) => this.openFollow(request, signal),
         control: signal => this.openControl(signal),
+        hardwareMonitorStream: async function* () {},
+        hardwareMonitorAttach: () => Promise.resolve(ok({ attached: true })),
       },
       subagents: {
         list: parentSessionId => this.record(

@@ -40,6 +40,7 @@ This table connects model-visible tool names to the plugin package and service s
 | `@deepseek-ai/dsh-tool-todo` | `todo_write` | `ctx.tools`, `owning Agent session` | `tool/call`, `todo/write`, `tool/result` | - | todo_write is session-owned state; UIs render the latest todo/write event as a checklist. `allowParallelInProgress` is required with no default, so the catalog states its choice: `true`, whose description invites several `in_progress` items. A deployment choosing `false` receives the same tool with a description asking for exactly one active task. |
 | `@deepseek-ai/dsh-tool-workflow` | `workflow` | `ctx.tools`, `ctx.workflowEngine`, `ctx.systemPrompt`, `a calling Agent (exec.agent parents the script children)` | `tool/call`, `tool/result` | - | - |
 | `@deepseek-ai/dsh-tool-web` | `web_fetch`, `web_search` | `ctx.tools`, `ctx.web`, `ctx.systemPrompt` | `tool/call`, `tool/result` | - | web_search and web_fetch keep provider selection behind ctx.web so model-visible schemas stay stable across backend swaps. |
+| `@deepseek-ai/dsh-tool-hardware-monitor` | `hardware_snapshot` | `ctx.tools`, `ctx.hardwareMonitor`, `ctx.systemPrompt` | `tool/call`, `tool/result` | - | hardware_snapshot returns a single point-in-time host snapshot from the composed hardware monitor; missing sensors are omitted. |
 
 <a id="deepseek-aidsh-tool-ask-user"></a>
 
@@ -2249,3 +2250,22 @@ Search the web for current information. Provide 1–4 queries in the required qu
 Source: [`packages/web/tool-web/src/index.ts`](../packages/web/tool-web/src/index.ts)
 
 web_search and web_fetch keep provider selection behind ctx.web so model-visible schemas stay stable across backend swaps.
+
+<a id="deepseek-aidsh-tool-hardware-monitor"></a>
+
+## `@deepseek-ai/dsh-tool-hardware-monitor`
+
+### `hardware_snapshot`
+
+Read current host CPU load, memory use, and graphics adapter facts from the composed hardware monitor. Missing sensors are omitted; values are a single point-in-time snapshot.
+
+```json
+{
+  "type": "object",
+  "properties": {}
+}
+```
+
+Source: [`packages/hardware-monitor/tool-hardware-monitor/src/index.ts`](../packages/hardware-monitor/tool-hardware-monitor/src/index.ts)
+
+hardware_snapshot returns a single point-in-time host snapshot from the composed hardware monitor; missing sensors are omitted.

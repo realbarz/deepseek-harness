@@ -18,6 +18,7 @@
     { "path": "../../client/store" },
     { "path": "../../context/file-reference" },
     { "path": "../../core/session" },
+    { "path": "../../hardware-monitor/hardware-monitor" },
     { "path": "../../jobs/jobs" },
     { "path": "../../llm/llm" },
     { "path": "../../session/session-projection" },

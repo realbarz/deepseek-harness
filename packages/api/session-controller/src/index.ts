@@ -3,8 +3,10 @@
 import { Context } from '@deepseek-ai/cordis'
 import z from '@deepseek-ai/schemastery'
 import { errorChain } from '@deepseek-ai/dsh-llm'
+import { createUserMessage } from '@deepseek-ai/dsh-llm'
 import { canOpenNativePath, openNativePath } from '@deepseek-ai/dsh-native-command'
 import type { SessionId } from '@deepseek-ai/dsh-session'
+import type {} from '@deepseek-ai/dsh-hardware-monitor'
 import type { SessionInspection } from '@deepseek-ai/dsh-session-persistence'
 import type { SessionObservation } from '@deepseek-ai/dsh-session-query'
 import { Remote, RemoteError, TypertRemoteService } from '@deepseek-ai/dsh-typert-protocol'
@@ -31,6 +33,10 @@ import type {
   SessionCreateRequest,
   SessionCreateValue,
   SessionFollowFrame,
+  SessionHardwareMonitorFrame,
+  SessionHardwareMonitorAttachRequest,
+  SessionHardwareMonitorAttachValue,
+  SessionHardwareMonitorRequest,
   SessionFollowRequest,
   SessionForkRequest,
   SessionForkValue,
@@ -389,6 +395,91 @@ export class SessionController extends TypertRemoteService {
   @Remote({ mode: 'stream' })
   control(signal: AbortSignal): AsyncIterable<SessionControlFrame> {
     return this.controlState.control(signal)
+  }
+
+  /**
+   * Stream the current host hardware snapshot to one attached Session. The
+   * provider owns sampling; this method only authorizes the Session and
+   * coalesces provider updates for the Remote consumer.
+   * @param request - Session identity to authorize.
+   * @param signal - Remote stream lifetime.
+   * @returns one baseline followed by replacement frames.
+   */
+  @Remote({ mode: 'stream' })
+  async *hardwareMonitorStream(
+    request: SessionHardwareMonitorRequest,
+    signal: AbortSignal,
+  ): AsyncIterable<SessionHardwareMonitorFrame> {
+    const sessionId = request.sessionId as SessionId
+    if (this.ctx.agents.get(sessionId) === undefined) {
+      throw new RemoteError('gateway/bad-request', 'hardware monitor requires an attached Session', {})
+    }
+    signal.throwIfAborted()
+    const updates: import('@deepseek-ai/dsh-hardware-monitor').HardwareSnapshot[] = []
+    let wake: (() => void) | undefined
+    const notify = (): void => { const resolve = wake; wake = undefined; resolve?.() }
+    const hardwareMonitor = this.ctx.get('hardwareMonitor')
+    if (hardwareMonitor === undefined) {
+      throw new RemoteError('gateway/bad-request', 'hardware monitor is not enabled in this composition', {})
+    }
+    const dispose = hardwareMonitor.subscribe((snapshot) => {
+      updates[0] = snapshot
+      notify()
+    })
+    const abort = (): void => { notify() }
+    signal.addEventListener('abort', abort, { once: true })
+    try {
+      const first = await new Promise<import('@deepseek-ai/dsh-hardware-monitor').HardwareSnapshot>((resolve) => {
+        if (updates[0] !== undefined) resolve(updates[0])
+        else wake = () => resolve(updates[0] as import('@deepseek-ai/dsh-hardware-monitor').HardwareSnapshot)
+      })
+      signal.throwIfAborted()
+      yield { type: 'snapshot', snapshot: first }
+      while (!signal.aborted) {
+        if (updates[0] === undefined) {
+          await new Promise<void>((resolve) => { wake = resolve })
+          continue
+        }
+        const next = updates[0]
+        updates.length = 0
+        yield { type: 'update', snapshot: next }
+      }
+    } finally {
+      signal.removeEventListener('abort', abort)
+      dispose()
+    }
+  }
+
+  /** Queue one current bounded hardware snapshot for the next admitted prompt. */
+  @Remote('hardwareMonitorAttach')
+  async hardwareMonitorAttach(
+    request: SessionHardwareMonitorAttachRequest,
+  ): Promise<SessionHardwareMonitorAttachValue> {
+    const agent = this.ctx.agents.get(request.sessionId as SessionId)
+    if (agent === undefined) {
+      throw new RemoteError('gateway/bad-request', 'hardware monitor requires an attached Session', {})
+    }
+    const hardwareMonitor = this.ctx.get('hardwareMonitor')
+    if (hardwareMonitor === undefined) {
+      throw new RemoteError('gateway/bad-request', 'hardware monitor is not enabled in this composition', {})
+    }
+    const snapshot = await hardwareMonitor.snapshot()
+    const text = JSON.stringify({
+      kind: 'hardware-monitor',
+      capturedAt: snapshot.capturedAt,
+      host: snapshot.host,
+      cpu: snapshot.cpu,
+      ...snapshot.memory === undefined ? {} : { memory: snapshot.memory },
+      gpu: snapshot.gpu,
+    })
+    if (new TextEncoder().encode(text).byteLength > 16 * 1024) {
+      throw new RemoteError('gateway/internal', 'hardware monitor snapshot exceeded the context budget', {})
+    }
+    agent.inject(createUserMessage({
+      content: [{ type: 'text', text: `Current hardware monitor observation:\n${text}` }],
+      source: { kind: 'plugin', plugin: 'hardware-monitor' },
+    }))
+    return { attached: true }
   }
 
 }

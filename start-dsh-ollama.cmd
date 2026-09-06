@@ -40,5 +40,5 @@ if errorlevel 1 (
   exit /b 1
 )
 
-pnpm dsh --profile web --patch "%ROOT%\ollama-headless.patch.yml"
+pnpm dsh --profile web --patch "%ROOT%\ollama-headless.patch.yml" --patch "%ROOT%\hardware-monitor-windows.patch.yml"
 exit /b %ERRORLEVEL%
