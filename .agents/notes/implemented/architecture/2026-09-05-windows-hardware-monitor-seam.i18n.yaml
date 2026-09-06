@@ -1,0 +1,6 @@
+# Bilingual-pair consistency record (docs/i18n/README.md): the git blob hash of each
+# side as of the last confirmed-consistent state. Both languages carry equal authority;
+# after editing either side, bring the other along and re-record with:
+#   pnpm run verify-translation-pairing --write .agents/notes/implemented/architecture/2026-09-05-windows-hardware-monitor-seam.md
+2026-09-05-windows-hardware-monitor-seam.md: bc4767acff7ba70823c73b5b015fd194ea70b2e4
+2026-09-05-windows-hardware-monitor-seam.zh.md: 6e1850b9a0cb2256775fc0c0875ada841640e31d

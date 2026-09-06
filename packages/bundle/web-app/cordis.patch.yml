@@ -269,6 +269,10 @@
     - id: ui-jobs
       name: '@deepseek-ai/dsh-client-ui-jobs'
 
+    - id: ui-hardware-monitor
+      name: '@deepseek-ai/dsh-client-ui-hardware-monitor'
+      disabled: true
+
     # Goal surface: GoalBar in the input dock over the goal session projection.
     - id: ui-goal
       name: '@deepseek-ai/dsh-client-ui-goal'

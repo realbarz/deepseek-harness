@@ -9,6 +9,7 @@ import type {} from '../remote-events.ts'
 
 export {
   createSessionControlStream,
+  createSessionHardwareMonitorStream,
   SessionEventStream,
   SESSION_SEARCH_RESULT_LIMIT,
   SESSION_SEARCH_SNIPPET_MAX_CODE_POINTS,
@@ -17,6 +18,8 @@ export type {
   ClientSessionPageRequest,
   SessionControlStream,
   SessionControlStreamOptions,
+  SessionHardwareMonitorStream,
+  SessionHardwareMonitorStreamOptions,
   SessionEventStreamOptions,
   SessionJournalChange,
   SessionRemote,

@@ -205,6 +205,16 @@
     - id: subprocess
       name: '@deepseek-ai/dsh-subprocess-local'
 
+    # Host hardware telemetry is opt-in. The provider is Windows-only and the
+    # rows remain disabled until a deployment patch explicitly enables them.
+    - id: hardware-monitor-windows
+      name: '@deepseek-ai/dsh-hardware-monitor-windows'
+      disabled: true
+
+    - id: tool-hardware-monitor
+      name: '@deepseek-ai/dsh-tool-hardware-monitor'
+      disabled: true
+
     # Every shipped CLI mode starts with the same file-effect boundary.
     # The environment remains an explicit deployment override; otherwise fresh
     # sessions pin workspace-write + ask through the permission service below.

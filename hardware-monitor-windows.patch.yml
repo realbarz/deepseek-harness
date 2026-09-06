@@ -1,0 +1,10 @@
+# Enable the Windows hardware snapshot capability for an Ollama or LM Studio
+# deployment. Apply with the profile's normal --patch mechanism.
+- id: hardware-monitor-windows
+  disabled: false
+
+- id: tool-hardware-monitor
+  disabled: false
+
+- id: ui-hardware-monitor
+  disabled: false

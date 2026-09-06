@@ -67,7 +67,19 @@ import * as ToolWeb from '@deepseek-ai/dsh-tool-web'
 import VmWorkflowEngine from '@deepseek-ai/dsh-workflow-worker-thread'
 import * as ToolRalph from '@deepseek-ai/dsh-tool-ralph'
 import * as ToolWorkflow from '@deepseek-ai/dsh-tool-workflow'
+import { HardwareMonitor, type HardwareSnapshot } from '@deepseek-ai/dsh-hardware-monitor'
+import * as ToolHardwareMonitor from '@deepseek-ai/dsh-tool-hardware-monitor'
 import { githubSlug } from './verify-md-links.ts'
+
+class CatalogHardwareMonitor extends HardwareMonitor {
+  override snapshot(): Promise<HardwareSnapshot> {
+    return Promise.reject(new Error('gen-tool-catalog: hardware snapshot is unreachable during schema harvest'))
+  }
+
+  override subscribe(): () => void {
+    return () => {}
+  }
+}
 
 /** Attachment seam marker that makes the attachments-conditional `read_image` schema harvestable. */
 class CatalogAttachmentStore extends AttachmentStore {
@@ -589,6 +601,19 @@ const TOOL_PACKAGES: ToolPackage[] = [
     },
     note:
       'web_search and web_fetch keep provider selection behind ctx.web so model-visible schemas stay stable across backend swaps.',
+  },
+  {
+    pkg: '@deepseek-ai/dsh-tool-hardware-monitor',
+    dir: 'tool-hardware-monitor',
+    source: 'packages/hardware-monitor/tool-hardware-monitor/src/index.ts',
+    requires: ['ctx.tools', 'ctx.hardwareMonitor', 'ctx.systemPrompt'],
+    writes: ['tool/call', 'tool/result'],
+    async mount(ctx) {
+      await ctx.plugin(CatalogHardwareMonitor)
+      await ctx.plugin(ToolHardwareMonitor)
+    },
+    note:
+      'hardware_snapshot returns a single point-in-time host snapshot from the composed hardware monitor; missing sensors are omitted.',
   },
 ]
 

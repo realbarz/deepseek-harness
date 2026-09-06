@@ -163,6 +163,36 @@ export interface SessionSummary {
   readonly projections?: SessionProjectionHints
 }
 
+/** Request for the live hardware-monitor channel of one attached Session. */
+export interface SessionHardwareMonitorRequest {
+  readonly sessionId: string
+}
+
+/** Request to attach one current hardware snapshot to the next Session prompt. */
+export type SessionHardwareMonitorAttachRequest = SessionHardwareMonitorRequest
+
+/** Acknowledgement for a queued hardware context message. */
+export interface SessionHardwareMonitorAttachValue {
+  readonly attached: true
+}
+
+/** One complete opening frame for the live hardware-monitor channel. */
+export interface SessionHardwareMonitorSnapshotFrame {
+  readonly type: 'snapshot'
+  readonly snapshot: import('@deepseek-ai/dsh-hardware-monitor').HardwareSnapshot
+}
+
+/** One replacement frame after the opening hardware-monitor snapshot. */
+export interface SessionHardwareMonitorUpdateFrame {
+  readonly type: 'update'
+  readonly snapshot: import('@deepseek-ai/dsh-hardware-monitor').HardwareSnapshot
+}
+
+/** Baseline-plus-update stream vocabulary for live hardware telemetry. */
+export type SessionHardwareMonitorFrame =
+  | SessionHardwareMonitorSnapshotFrame
+  | SessionHardwareMonitorUpdateFrame
+
 /** One session-content search result. */
 export interface SessionSearchItem {
   readonly sessionId: SessionId

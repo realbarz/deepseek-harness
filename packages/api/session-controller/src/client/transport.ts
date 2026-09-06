@@ -13,6 +13,8 @@ import {
 import type {
   SessionAddress,
   SessionControlFrame,
+  SessionHardwareMonitorFrame,
+  SessionHardwareMonitorRequest,
   SessionHistoryRecord,
   SessionPage,
   SessionPageRequest,
@@ -83,6 +85,45 @@ export type SessionControlStream = RemoteSnapshotStream<
   SessionControlBaselineFrame,
   SessionControlDeltaFrame
 >
+
+type SessionHardwareMonitorSnapshotFrame = Extract<SessionHardwareMonitorFrame, { type: 'snapshot' }>
+type SessionHardwareMonitorUpdateFrame = Extract<SessionHardwareMonitorFrame, { type: 'update' }>
+
+/** Gateway-owned hardware-monitor stream bound to one Session. */
+export type SessionHardwareMonitorStream = RemoteSnapshotStream<
+  SessionHardwareMonitorSnapshotFrame,
+  SessionHardwareMonitorUpdateFrame
+>
+
+/** Client-side state sinks for one Session hardware-monitor channel. */
+export interface SessionHardwareMonitorStreamOptions {
+  readonly accept: (frame: SessionHardwareMonitorFrame) => void
+  readonly carrierFailed?: (error: RemoteStreamCarrierError) => void
+  readonly failed: (error: unknown) => void
+}
+
+/** Create an unstarted reconnecting hardware-monitor stream for one Session. */
+export function createSessionHardwareMonitorStream(
+  remote: SessionRemotes,
+  request: SessionHardwareMonitorRequest,
+  options: SessionHardwareMonitorStreamOptions,
+): SessionHardwareMonitorStream {
+  const stream = remote.$stream<SessionHardwareMonitorFrame>({
+    name: 'session hardware monitor stream',
+    open: signal => remote.session.hardwareMonitorStream(request, signal),
+    ended: accepted => accepted
+      ? new RemoteStreamCarrierError('session hardware monitor stream ended without a terminal result')
+      : new Error('session hardware monitor stream ended before its opening snapshot'),
+    ...(options.carrierFailed === undefined ? {} : { carrierFailed: options.carrierFailed }),
+  })
+  return new RemoteSnapshotStream(stream, {
+    name: 'session hardware monitor stream',
+    isSnapshot: (frame): frame is SessionHardwareMonitorSnapshotFrame => frame.type === 'snapshot',
+    replace: options.accept,
+    update: options.accept,
+    failed: options.failed,
+  })
+}
 
 /** Domain sinks used by the Host-wide Session control stream. */
 export interface SessionControlStreamOptions {
