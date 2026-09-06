@@ -1,0 +1,27 @@
+{
+  "name": "@deepseek-ai/dsh-tool-hardware-monitor",
+  "description": "Model-facing hardware snapshot tool for DeepSeek Harness",
+  "version": "0.1.2-rc.1",
+  "publishConfig": { "access": "public" },
+  "repository": { "type": "git", "url": "git+https://github.com/deepseek-ai/deepseek-harness.git", "directory": "packages/hardware-monitor/tool-hardware-monitor" },
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": { ".": { "types": "./lib/types/index.d.ts", "default": "./lib/index.js" }, "./src/*": "./src/*", "./package.json": "./package.json" },
+  "files": ["lib/index.js", "lib/types/**/*.d.ts"],
+  "license": "MIT",
+  "peerDependencies": {
+    "@deepseek-ai/dsh-hardware-monitor": "workspace:^",
+    "@deepseek-ai/dsh-tools": "workspace:^",
+    "@deepseek-ai/dsh-util-values": "workspace:^",
+    "@deepseek-ai/dsh-system-prompt": "workspace:^",
+    "@deepseek-ai/cordis": "workspace:^"
+  },
+  "devDependencies": {
+    "@deepseek-ai/cordis": "workspace:^",
+    "@deepseek-ai/dsh-hardware-monitor": "workspace:^",
+    "@deepseek-ai/dsh-tools": "workspace:^",
+    "@deepseek-ai/dsh-util-values": "workspace:^",
+    "@deepseek-ai/dsh-system-prompt": "workspace:^"
+  }
+}
