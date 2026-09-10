@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "windows-computer-control": {
+      "transport": "stdio",
+      "command": "py",
+      "args": [
+        "E:\\Github - Repositories\\deepseek-harness\\computer_control_mcp.py"
+      ]
+    }
+  }
+}

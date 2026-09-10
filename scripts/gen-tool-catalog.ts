@@ -33,10 +33,9 @@ import WebRuntime from '@deepseek-ai/dsh-web'
 import * as WebSearchExa from '@deepseek-ai/dsh-web-search-exa'
 import * as WebFetchLocal from '@deepseek-ai/dsh-web-fetch-http'
 import SubagentRuntime from '@deepseek-ai/dsh-subagent'
-import type { SubagentProvider, SubagentReportDelivery } from '@deepseek-ai/dsh-subagent'
+import type { SubagentProvider } from '@deepseek-ai/dsh-subagent'
 import * as ToolSubagentControl from '@deepseek-ai/dsh-tool-subagent-control'
 import * as ToolSubagentListAgents from '@deepseek-ai/dsh-tool-subagent-control/list-agents'
-import * as ToolSubagentReport from '@deepseek-ai/dsh-tool-subagent-report'
 import SkillRegistry from '@deepseek-ai/dsh-skill'
 import * as SkillFileSystem from '@deepseek-ai/dsh-skill-filesystem'
 import LocalJobRegistry from '@deepseek-ai/dsh-jobs-local'
@@ -68,7 +67,19 @@ import * as ToolWeb from '@deepseek-ai/dsh-tool-web'
 import VmWorkflowEngine from '@deepseek-ai/dsh-workflow-worker-thread'
 import * as ToolRalph from '@deepseek-ai/dsh-tool-ralph'
 import * as ToolWorkflow from '@deepseek-ai/dsh-tool-workflow'
+import { HardwareMonitor, type HardwareSnapshot } from '@deepseek-ai/dsh-hardware-monitor'
+import * as ToolHardwareMonitor from '@deepseek-ai/dsh-tool-hardware-monitor'
 import { githubSlug } from './verify-md-links.ts'
+
+class CatalogHardwareMonitor extends HardwareMonitor {
+  override snapshot(): Promise<HardwareSnapshot> {
+    return Promise.reject(new Error('gen-tool-catalog: hardware snapshot is unreachable during schema harvest'))
+  }
+
+  override subscribe(): () => void {
+    return () => {}
+  }
+}
 
 /** Attachment seam marker that makes the attachments-conditional `read_image` schema harvestable. */
 class CatalogAttachmentStore extends AttachmentStore {
@@ -489,33 +500,11 @@ const TOOL_PACKAGES: ToolPackage[] = [
       await ctx.plugin(LocalJobRegistry)
       await ctx.plugin(AgentRegistry)
       await ctx.plugin(SessionStore)
-      await ctx.plugin(SessionProjectionRegistry)
       await ctx.plugin(ToolSubagentControl)
       await ctx.plugin(ToolSubagentListAgents)
     },
     note:
       'The globally named control tools over continuable background subagents: provider-bound `tool-subagent` instances register distinct delegation tools, while this package registers `send_message` and `interrupt_agent` once, plus `list_agents` from its separately loaded `/list-agents` plugin (whose catalog rows use the sessionProjections and live Agent registries).',
-  },
-  {
-    pkg: '@deepseek-ai/dsh-tool-subagent-report',
-    dir: 'tool-subagent-report',
-    source: 'packages/subagent/tool-subagent-report/src/index.ts',
-    requires: ['ctx.subagents', 'ctx.systemPrompt', 'a live continuable in-process child Agent'],
-    writes: ['tool/call', 'tool/result', 'a user-role message in the direct parent session'],
-    async mount(ctx) {
-      await ctx.plugin(AgentRegistry)
-      await ctx.plugin(SubagentRuntime)
-      const { reportDelivery } = ToolSubagentReport.Config({}) as { reportDelivery: SubagentReportDelivery }
-      await mountCatalogChildScope(ctx, (childCtx) => {
-        ToolSubagentReport.installReportTool(childCtx, ctx, reportDelivery)
-      })
-    },
-    scope: ctx => catalogChildScopes.get(ctx) as Agent,
-    note:
-      'Registered per continuable in-process child rather than globally, so this schema is visible only '
-      + 'inside such a child and survives its global `toolFilter`. The same contribution installs the '
-      + 'child-scoped `tool:report` prompt section, which this catalog does not render. The parent-facing '
-      + '`send_message` tool is installed independently.',
   },
   {
     pkg: '@deepseek-ai/dsh-tool-jobs',
@@ -613,6 +602,19 @@ const TOOL_PACKAGES: ToolPackage[] = [
     note:
       'web_search and web_fetch keep provider selection behind ctx.web so model-visible schemas stay stable across backend swaps.',
   },
+  {
+    pkg: '@deepseek-ai/dsh-tool-hardware-monitor',
+    dir: 'tool-hardware-monitor',
+    source: 'packages/hardware-monitor/tool-hardware-monitor/src/index.ts',
+    requires: ['ctx.tools', 'ctx.hardwareMonitor', 'ctx.systemPrompt'],
+    writes: ['tool/call', 'tool/result'],
+    async mount(ctx) {
+      await ctx.plugin(CatalogHardwareMonitor)
+      await ctx.plugin(ToolHardwareMonitor)
+    },
+    note:
+      'hardware_snapshot returns a single point-in-time host snapshot from the composed hardware monitor; missing sensors are omitted.',
+  },
 ]
 
 /** One package's contribution to the catalog: its schemas plus attribution. */
@@ -690,6 +692,7 @@ export async function collectToolCatalog(packages: ToolPackage[] = TOOL_PACKAGES
     // plugins mounted still tears the context down (no leaked executor/provider
     // fiber) — the repo's "dispose must reach quiescence" rule.
     try {
+      await ctx.plugin(SessionProjectionRegistry)
       await ctx.plugin(SystemPrompt)
       await ctx.plugin(ToolRuntime, entry.toolsConfig ?? {})
       await entry.mount(ctx)
