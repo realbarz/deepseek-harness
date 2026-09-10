@@ -1,5 +1,6 @@
 CLAUDE.local.md
 .env
+.dsh-ollama*/
 node_modules/
 lib/
 *.tsbuildinfo
@@ -44,3 +45,5 @@ worktrees/
 .agents/worktrees/
 .typert-*/
 native/system/test/bin/
+.pnpm-store-win/
+.pnpm-store-debian/
