@@ -56,7 +56,7 @@ export class HardwareMonitorController {
     })()
   }
 
-  async stop(sessionId: string): Promise<void> {
+  stop(sessionId: string): void {
     const controller = this.controllers.get(sessionId)
     this.controllers.delete(sessionId)
     if (controller !== undefined) controller.abort()
@@ -71,9 +71,9 @@ export class HardwareMonitorController {
     await remote.session.hardwareMonitorAttach({ sessionId })
   }
 
-  async dispose(): Promise<void> {
+  dispose(): void {
     for (const [sessionId] of this.controllers) {
-      await this.stop(sessionId)
+      this.stop(sessionId)
     }
     this.listeners.clear()
   }

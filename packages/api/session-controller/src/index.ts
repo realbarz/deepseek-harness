@@ -431,7 +431,7 @@ export class SessionController extends TypertRemoteService {
     try {
       const first = await new Promise<import('@deepseek-ai/dsh-hardware-monitor').HardwareSnapshot>((resolve) => {
         if (updates[0] !== undefined) resolve(updates[0])
-        else wake = () => resolve(updates[0] as import('@deepseek-ai/dsh-hardware-monitor').HardwareSnapshot)
+        else wake = () => { resolve(updates[0] as import('@deepseek-ai/dsh-hardware-monitor').HardwareSnapshot) }
       })
       signal.throwIfAborted()
       yield { type: 'snapshot', snapshot: first }
