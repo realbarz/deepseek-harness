@@ -35,9 +35,10 @@ if ($env:NODE_HOME) {
 Push-Location $root
 try {
     $pnpm = Get-Command pnpm -ErrorAction Stop
-  & $pnpm.Source dsh --profile web `
+    & $pnpm.Source dsh --profile web `
     --patch (Join-Path $root 'ollama-headless.patch.yml') `
-    --patch (Join-Path $root 'hardware-monitor-windows.patch.yml')
+    --patch (Join-Path $root 'hardware-monitor-windows.patch.yml') `
+    --no-open
     exit $LASTEXITCODE
 }
 finally {

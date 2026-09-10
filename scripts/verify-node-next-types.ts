@@ -156,6 +156,7 @@ try {
   failed = true
   const output = error as { stdout?: Buffer; stderr?: Buffer }
   console.error('verify-node-next-types: NodeNext consumer typecheck failed.\n')
+  console.error(error)
   console.error(`${output.stdout?.toString() ?? ''}${output.stderr?.toString() ?? ''}`)
 } finally {
   rmSync(tmp, { recursive: true, force: true })

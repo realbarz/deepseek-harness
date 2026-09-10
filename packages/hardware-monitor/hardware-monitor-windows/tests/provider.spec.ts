@@ -25,8 +25,8 @@ describe('Windows hardware monitor provider', () => {
   })
 
   it('rejects an empty category selection and oversized selector list', () => {
-    expect(() => validateSettings({ ...base, categories: [] })).toThrow(/at least one category/)
-    expect(() => validateSettings({ ...base, sensorNames: Array.from({ length: 33 }, () => 'sensor') }))
+    expect(() => { validateSettings({ ...base, categories: [] }) }).toThrow(/at least one category/)
+    expect(() => { validateSettings({ ...base, sensorNames: Array.from({ length: 33 }, () => 'sensor') }) })
       .toThrow(/at most 32 sensor names/)
   })
 

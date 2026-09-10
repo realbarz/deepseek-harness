@@ -220,8 +220,15 @@ export class WindowsHardwareMonitor extends HardwareMonitor {
       for (const listener of this.listeners) listener(snapshot)
     } finally {
       this.sampling = false
-      if (this.listeners.size > 0 && !this.disposed && this.source().enabled) {
-        this.timer = setTimeout(() => { this.timer = undefined; void this.sampleAndSchedule() }, this.source().intervalMs)
+      const settings = this.source()
+      // eslint-disable-next-line typescript/no-unnecessary-condition
+      if (this.listeners.size > 0 && !this.disposed) {
+        if (settings.enabled) {
+          this.timer = setTimeout(() => {
+            this.timer = undefined
+            void this.sampleAndSchedule()
+          }, settings.intervalMs)
+        }
       }
     }
   }
@@ -230,8 +237,8 @@ export class WindowsHardwareMonitor extends HardwareMonitor {
     const settings = this.source()
     validateSettings(settings)
     const controller = new AbortController()
-    const timeout = setTimeout(() => controller.abort(), this.config.timeoutMs)
-    const abort = () => controller.abort()
+    const timeout = setTimeout(() => { controller.abort() }, this.config.timeoutMs)
+    const abort = () => { controller.abort() }
     request.signal?.addEventListener('abort', abort, { once: true })
     const handle = this.subprocess.spawn({
       argv: ['powershell.exe', '-NoLogo', '-NoProfile', '-NonInteractive', '-Command', queryFor(settings)],

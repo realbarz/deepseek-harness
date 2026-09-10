@@ -38,7 +38,7 @@ export function HardwareMonitorAction({ sessionId, t, controller }: Props) {
   const snapshot = view.snapshot
 
   useEffect(() => controller.subscribe(() => { redraw(value => value + 1) }), [controller])
-  useEffect(() => () => { void controller.stop(sessionId) }, [controller, sessionId])
+  useEffect(() => () => { controller.stop(sessionId) }, [controller, sessionId])
 
   return (
     <div className={css.root}>
@@ -71,7 +71,7 @@ export function HardwareMonitorAction({ sessionId, t, controller }: Props) {
             <div className={css.row}><span>{t('gpu')}</span><span>{snapshot.gpu.map(item => item.name).join(', ')}</span></div>
           ) : null}
           {snapshot ? <div className={css.updated}>{t('updated', { seconds: ageSeconds(snapshot) })}</div> : null}
-          <button type="button" className={css.control} onClick={() => { void controller.stop(sessionId); setOpen(false) }}>
+          <button type="button" className={css.control} onClick={() => { controller.stop(sessionId); setOpen(false) }}>
             {t('stop')}
           </button>
           <button type="button" className={css.control} onClick={() => { void controller.attachNextPrompt(sessionId) }}>

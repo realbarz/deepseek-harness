@@ -14,7 +14,7 @@ export const inject = ['sessions', 'slots', 'locale', 'remote', 'remote.session'
 export function apply(ctx: ClientContext): void {
   ctx.effect(() => ctx.locale.register(NS, { en, zh }), 'ui-hardware-monitor: dictionaries')
   const controller = new HardwareMonitorController(ctx)
-  ctx.effect(() => () => { void controller.dispose() }, 'ui-hardware-monitor: controller')
+  ctx.effect(() => () => { controller.dispose() }, 'ui-hardware-monitor: controller')
   ctx.slots.inject('conversation.session.header.actions', () => ctx.slots.register({
     name: 'conversation.session.header.actions',
     id: 'hardware-monitor',
