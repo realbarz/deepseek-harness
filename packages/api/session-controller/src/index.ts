@@ -7,7 +7,6 @@ import { errorChain } from '@deepseek-ai/dsh-llm'
 import type {} from '@deepseek-ai/dsh-client-file-upload'
 import { canOpenNativePath, nativeFileManager, openNativePath, revealNativePath } from '@deepseek-ai/dsh-native-command'
 import { createUserMessage } from '@deepseek-ai/dsh-llm'
-import { canOpenNativePath, openNativePath } from '@deepseek-ai/dsh-native-command'
 import type { SessionId } from '@deepseek-ai/dsh-session'
 import type {} from '@deepseek-ai/dsh-hardware-monitor'
 import type { SessionInspection } from '@deepseek-ai/dsh-session-persistence'
@@ -15,6 +14,7 @@ import type { SessionObservation } from '@deepseek-ai/dsh-session-query'
 import { Remote, RemoteError, TypertRemoteService } from '@deepseek-ai/dsh-typert-protocol'
 import {
   ApiSessionAgentController,
+  ApiSessionNotFound,
   inspectApiSession,
   type ApiSessionAgentResult,
 } from './agent.ts'
@@ -422,6 +422,10 @@ export class SessionController extends TypertRemoteService {
    * Stream the current host hardware snapshot to one attached Session. The
    * provider owns sampling; this method only authorizes the Session and
    * coalesces provider updates for the Remote consumer.
+   * Stream the current host hardware snapshot to one authorized Session. The
+   * provider owns sampling; this method authorizes the Session identity and
+   * coalesces provider updates for the Remote consumer. The stream is
+   * host-level and does not require the Session's Agent to be active.
    * @param request - Session identity to authorize.
    * @param signal - Remote stream lifetime.
    * @returns one baseline followed by replacement frames.
@@ -432,8 +436,13 @@ export class SessionController extends TypertRemoteService {
     signal: AbortSignal,
   ): AsyncIterable<SessionHardwareMonitorFrame> {
     const sessionId = request.sessionId as SessionId
-    if (this.ctx.agents.get(sessionId) === undefined) {
-      throw new RemoteError('gateway/bad-request', 'hardware monitor requires an attached Session', {})
+    try {
+      await this.inspect(sessionId, signal)
+    } catch (error: unknown) {
+      if (error instanceof ApiSessionNotFound) {
+        throw new RemoteError('gateway/bad-request', `hardware monitor: session "${sessionId}" not found`, {})
+      }
+      throw error
     }
     signal.throwIfAborted()
     const updates: import('@deepseek-ai/dsh-hardware-monitor').HardwareSnapshot[] = []
@@ -492,6 +501,7 @@ export class SessionController extends TypertRemoteService {
       cpu: snapshot.cpu,
       ...snapshot.memory === undefined ? {} : { memory: snapshot.memory },
       gpu: snapshot.gpu,
+      ...snapshot.disks === undefined ? {} : { disks: snapshot.disks },
     })
     if (new TextEncoder().encode(text).byteLength > 16 * 1024) {
       throw new RemoteError('gateway/internal', 'hardware monitor snapshot exceeded the context budget', {})

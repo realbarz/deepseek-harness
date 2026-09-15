@@ -17,6 +17,14 @@ function formatPercent(value: number): string {
   return `${Math.round(value)}%`
 }
 
+function formatBytesGb(bytes: number): string {
+  return `${(bytes / (1024 * 1024 * 1024)).toFixed(1)} GB`
+}
+
+function formatRateMb(bytesPerSec: number): string {
+  return `${(bytesPerSec / (1024 * 1024)).toFixed(1)} MB/s`
+}
+
 function ageSeconds(snapshot: HardwareSnapshot | undefined): number {
   return snapshot === undefined ? 0 : Math.max(0, Math.floor((Date.now() - snapshot.capturedAt) / 1_000))
 }
@@ -61,22 +69,125 @@ export function HardwareMonitorAction({ sessionId, t, controller }: Props) {
             <span>{statusText(view, t)}</span>
           </div>
           {view.error ? <div className={css.error}>{view.error}</div> : null}
+
+          {/* CPU Section */}
           {snapshot?.cpu.length ? (
-            <div className={css.row}><span>{t('cpu')}</span><span>{snapshot.cpu.map(item => `${item.name}: ${item.loadPercent === undefined ? t('unavailable') : formatPercent(item.loadPercent)}`).join(', ')}</span></div>
+            <>
+              <div className={css.sectionHeader}>{t('cpu')}</div>
+              {snapshot.cpu.map((cpu, i) => (
+                <div key={i}>
+                  <div className={css.row}>
+                    <span>{cpu.name}</span>
+                    <span>{cpu.loadPercent === undefined ? t('unavailable') : formatPercent(cpu.loadPercent)}</span>
+                  </div>
+                  {(cpu.temperatureC !== undefined || cpu.packagePowerW !== undefined
+                    || cpu.maxCoreMhz !== undefined || cpu.voltageV !== undefined) ? (
+                      <div className={css.subRow}>
+                        <span>
+                          {[
+                            cpu.temperatureC !== undefined ? `${cpu.temperatureC.toFixed(0)}°C` : null,
+                            cpu.packagePowerW !== undefined ? `${cpu.packagePowerW.toFixed(1)}W` : null,
+                            cpu.maxCoreMhz !== undefined ? `${Math.round(cpu.maxCoreMhz)} MHz` : null,
+                            cpu.voltageV !== undefined ? `${cpu.voltageV.toFixed(3)}V` : null,
+                          ].filter(Boolean).join(' · ')}
+                        </span>
+                      </div>
+                    ) : null}
+                </div>
+              ))}
+            </>
           ) : null}
+
+          {/* Memory Section */}
           {snapshot?.memory ? (
-            <div className={css.row}><span>{t('memory')}</span><span>{formatPercent(snapshot.memory.usedPercent)}</span></div>
+            <>
+              <div className={css.sectionHeader}>{t('memory')}</div>
+              <div className={css.row}>
+                <span>{t('memory')}</span>
+                <span>
+                  {`${formatPercent(snapshot.memory.usedPercent)} (${formatBytesGb(snapshot.memory.usedBytes)} / ${formatBytesGb(snapshot.memory.totalBytes)})`}
+                </span>
+              </div>
+              {snapshot.memory.virtualTotalBytes !== undefined && snapshot.memory.virtualAvailableBytes !== undefined ? (
+                <div className={css.subRow}>
+                  <span>{t('virtualMemory')}</span>
+                  <span>
+                    {`${formatBytesGb(snapshot.memory.virtualTotalBytes - snapshot.memory.virtualAvailableBytes)} / ${formatBytesGb(snapshot.memory.virtualTotalBytes)}`}
+                  </span>
+                </div>
+              ) : null}
+            </>
           ) : null}
+
+          {/* GPU Section */}
           {snapshot?.gpu.length ? (
-            <div className={css.row}><span>{t('gpu')}</span><span>{snapshot.gpu.map(item => item.name).join(', ')}</span></div>
+            <>
+              <div className={css.sectionHeader}>{t('gpu')}</div>
+              {snapshot.gpu.map((gpu, i) => (
+                <div key={i}>
+                  <div className={css.row}>
+                    <span>{gpu.name}</span>
+                    <span>{gpu.loadPercent !== undefined ? formatPercent(gpu.loadPercent) : (gpu.temperatureC !== undefined ? `${gpu.temperatureC.toFixed(0)}°C` : '')}</span>
+                  </div>
+                  {(gpu.temperatureC !== undefined || gpu.hotSpotC !== undefined
+                    || gpu.powerW !== undefined || gpu.fansRpm !== undefined || gpu.memoryBytes !== undefined) ? (
+                      <div className={css.subRow}>
+                        <span>
+                          {[
+                            gpu.temperatureC !== undefined ? `${gpu.temperatureC.toFixed(0)}°C` : null,
+                            gpu.hotSpotC !== undefined ? `hotspot ${gpu.hotSpotC.toFixed(0)}°C` : null,
+                            gpu.powerW !== undefined ? `${gpu.powerW.toFixed(0)}W` : null,
+                            gpu.fansRpm && gpu.fansRpm.length > 0 ? gpu.fansRpm.map(rpm => `${Math.round(rpm)} RPM`).join(' / ') : null,
+                            gpu.memoryBytes !== undefined ? `${formatBytesGb(gpu.memoryBytes)} VRAM` : null,
+                          ].filter(Boolean).join(' · ')}
+                        </span>
+                      </div>
+                    ) : null}
+                </div>
+              ))}
+            </>
           ) : null}
+
+          {/* Disks Section */}
+          {snapshot?.disks && snapshot.disks.length > 0 ? (
+            <>
+              <div className={css.sectionHeader}>{t('disks')}</div>
+              {snapshot.disks.map((disk, i) => (
+                <div key={i} className={css.diskItem}>
+                  <div className={css.row}>
+                    <span>{disk.name}</span>
+                    <span>
+                      {[
+                        disk.temperatureC !== undefined ? `${disk.temperatureC.toFixed(0)}°C` : null,
+                        disk.activityPercent !== undefined ? `${formatPercent(disk.activityPercent)} ${t('activity')}` : null,
+                      ].filter(Boolean).join(' · ') || t('unavailable')}
+                    </span>
+                  </div>
+                  {(disk.readBytesPerSec !== undefined || disk.writeBytesPerSec !== undefined) ? (
+                    <div className={css.subRow}>
+                      <span>{t('readWrite')}</span>
+                      <span>
+                        {[
+                          disk.readBytesPerSec !== undefined ? `↓ ${formatRateMb(disk.readBytesPerSec)}` : null,
+                          disk.writeBytesPerSec !== undefined ? `↑ ${formatRateMb(disk.writeBytesPerSec)}` : null,
+                        ].filter(Boolean).join('  ')}
+                      </span>
+                    </div>
+                  ) : null}
+                </div>
+              ))}
+            </>
+          ) : null}
+
           {snapshot ? <div className={css.updated}>{t('updated', { seconds: ageSeconds(snapshot) })}</div> : null}
-          <button type="button" className={css.control} onClick={() => { controller.stop(sessionId); setOpen(false) }}>
-            {t('stop')}
-          </button>
-          <button type="button" className={css.control} onClick={() => { void controller.attachNextPrompt(sessionId) }}>
-            {t('attach')}
-          </button>
+          <div className={css.actions}>
+            <button type="button" className={css.control} onClick={() => { controller.stop(sessionId); setOpen(false) }}>
+              {t('stop')}
+            </button>
+            <button type="button" className={css.control} onClick={() => { void controller.attachNextPrompt(sessionId) }}>
+              {t('attach')}
+            </button>
+          </div>
         </div>
       ) : null}
     </div>
