@@ -1,0 +1,221 @@
+# Domain III: Financial Autonomy & Wealth Management
+# DeepSeek Harness Cordis Profile Overlay
+# Launch: pnpm dsh web --patch overlays/03-financial-autonomy.patch.yml
+
+- insert:
+    - id: mcp-crypto-portfolio
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.COINBASE_API_KEY'
+      config:
+        serverName: crypto
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-coinbase']
+        env:
+          COINBASE_API_KEY: !!js process.env.COINBASE_API_KEY || ""
+          COINBASE_API_SECRET: !!js process.env.COINBASE_API_SECRET || ""
+        failOnStartupError: false
+
+    - id: mcp-stock-alpaca
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.ALPACA_API_KEY_ID'
+      config:
+        serverName: equities
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-alpaca']
+        env:
+          ALPACA_API_KEY_ID: !!js process.env.ALPACA_API_KEY_ID || ""
+          ALPACA_SECRET_KEY: !!js process.env.ALPACA_SECRET_KEY || ""
+        failOnStartupError: false
+
+    - id: mcp-real-estate-zillow
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: real_estate
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-real-estate']
+        failOnStartupError: false
+
+    - id: mcp-stripe-invoicing
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.STRIPE_SECRET_KEY'
+      config:
+        serverName: stripe
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-stripe']
+        env:
+          STRIPE_SECRET_KEY: !!js process.env.STRIPE_SECRET_KEY || ""
+        failOnStartupError: false
+
+    - id: mcp-aws-cost-explorer
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.AWS_ACCESS_KEY_ID'
+      config:
+        serverName: cloud_cost
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-aws-cost']
+        env:
+          AWS_ACCESS_KEY_ID: !!js process.env.AWS_ACCESS_KEY_ID || ""
+          AWS_SECRET_ACCESS_KEY: !!js process.env.AWS_SECRET_ACCESS_KEY || ""
+        failOnStartupError: false
+
+    - id: mcp-ethereum-rpc
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.ETH_RPC_URL'
+      config:
+        serverName: ethereum
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-ethereum']
+        env:
+          ETH_RPC_URL: !!js process.env.ETH_RPC_URL || 'https://cloudflare-eth.com'
+        failOnStartupError: false
+
+    - id: mcp-solana-rpc
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.SOLANA_RPC_URL'
+      config:
+        serverName: solana
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-solana']
+        env:
+          SOLANA_RPC_URL: !!js process.env.SOLANA_RPC_URL || 'https://api.mainnet-beta.solana.com'
+        failOnStartupError: false
+
+    - id: mcp-defi-uniswap
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: uniswap
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-uniswap']
+        failOnStartupError: false
+
+    - id: mcp-crypto-gas-tracker
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: gas_tracker
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-gas-tracker']
+        failOnStartupError: false
+
+    - id: mcp-robinhood-trader
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: robinhood
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-robinhood']
+        failOnStartupError: false
+
+    - id: mcp-kraken-exchange
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: kraken
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-kraken']
+        failOnStartupError: false
+
+    - id: mcp-coingecko-data
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: coingecko
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-coingecko']
+        failOnStartupError: false
+
+    - id: mcp-alpha-vantage
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.ALPHA_VANTAGE_API_KEY'
+      config:
+        serverName: alphavantage
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-alpha-vantage']
+        env:
+          ALPHA_VANTAGE_API_KEY: !!js process.env.ALPHA_VANTAGE_API_KEY || ""
+        failOnStartupError: false
+
+    - id: mcp-sec-filings
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: sec_filings
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-sec-edgar']
+        failOnStartupError: false
+
+    - id: mcp-poly-market
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: polymarket
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-polymarket']
+        failOnStartupError: false
+
+    - id: mcp-tax-cointracker
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: crypto_tax
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-cointracker']
+        failOnStartupError: false
+
+    - id: mcp-paypal-business
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: paypal
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-paypal']
+        failOnStartupError: false
+
+    - id: mcp-wise-transfer
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: wise
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-wise']
+        failOnStartupError: false
+
+    - id: mcp-defi-llama
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: defillama
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-defillama']
+        failOnStartupError: false
+
+    - id: mcp-credit-score
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: credit_score
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-credit-score']
+        failOnStartupError: false

@@ -1,0 +1,227 @@
+# Domain II: E-Commerce, Arbitrage, Resale & Monetization Operations
+# DeepSeek Harness Cordis Profile Overlay
+# Launch: pnpm dsh web --patch overlays/02-ecommerce-arbitrage.patch.yml
+
+- insert:
+    - id: mcp-ebay-arbitrage
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.EBAY_APP_ID'
+      config:
+        serverName: ebay
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-ebay']
+        env:
+          EBAY_APP_ID: !!js process.env.EBAY_APP_ID || ""
+          EBAY_CERT_ID: !!js process.env.EBAY_CERT_ID || ""
+        failOnStartupError: false
+
+    - id: mcp-amazon-sp-api
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.AMAZON_REFRESH_TOKEN'
+      config:
+        serverName: amazon_sp
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-amazon-sp']
+        env:
+          AMAZON_REFRESH_TOKEN: !!js process.env.AMAZON_REFRESH_TOKEN || ""
+        failOnStartupError: false
+
+    - id: mcp-shopify-admin
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.SHOPIFY_STORE_DOMAIN'
+      config:
+        serverName: shopify
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-shopify']
+        env:
+          SHOPIFY_STORE_DOMAIN: !!js process.env.SHOPIFY_STORE_DOMAIN || ""
+          SHOPIFY_ACCESS_TOKEN: !!js process.env.SHOPIFY_ACCESS_TOKEN || ""
+        failOnStartupError: false
+
+    - id: mcp-gumroad-creator
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.GUMROAD_ACCESS_TOKEN'
+      config:
+        serverName: gumroad
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-gumroad']
+        env:
+          GUMROAD_ACCESS_TOKEN: !!js process.env.GUMROAD_ACCESS_TOKEN || ""
+        failOnStartupError: false
+
+    - id: mcp-ticketmaster-stubhub
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.TICKETMASTER_API_KEY'
+      config:
+        serverName: tickets
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-ticketmaster']
+        env:
+          TICKETMASTER_API_KEY: !!js process.env.TICKETMASTER_API_KEY || ""
+        failOnStartupError: false
+
+    - id: mcp-upwork-fiverr
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: freelance
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-freelance']
+        failOnStartupError: false
+
+    - id: mcp-stockx-goat
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: stockx
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-stockx']
+        failOnStartupError: false
+
+    - id: mcp-rakuten-cashback
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: cashback
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-cashback']
+        failOnStartupError: false
+
+    - id: mcp-aliexpress-ds
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: aliexpress
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-aliexpress']
+        failOnStartupError: false
+
+    - id: mcp-poshmark-mercari
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: secondhand
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-poshmark']
+        failOnStartupError: false
+
+    - id: mcp-walmart-marketplace
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: walmart
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-walmart']
+        failOnStartupError: false
+
+    - id: mcp-etsy-crafts
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.ETSY_API_KEY'
+      config:
+        serverName: etsy
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-etsy']
+        env:
+          ETSY_API_KEY: !!js process.env.ETSY_API_KEY || ""
+        failOnStartupError: false
+
+    - id: mcp-reverb-gear
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.REVERB_API_TOKEN'
+      config:
+        serverName: reverb
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-reverb']
+        env:
+          REVERB_API_TOKEN: !!js process.env.REVERB_API_TOKEN || ""
+        failOnStartupError: false
+
+    - id: mcp-chrono24-watches
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: chrono24
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-chrono24']
+        failOnStartupError: false
+
+    - id: mcp-discogs-vinyl
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.DISCOGS_API_TOKEN'
+      config:
+        serverName: discogs
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-discogs']
+        env:
+          DISCOGS_API_TOKEN: !!js process.env.DISCOGS_API_TOKEN || ""
+        failOnStartupError: false
+
+    - id: mcp-printify-pod
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.PRINTIFY_API_TOKEN'
+      config:
+        serverName: printify
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-printify']
+        env:
+          PRINTIFY_API_TOKEN: !!js process.env.PRINTIFY_API_TOKEN || ""
+        failOnStartupError: false
+
+    - id: mcp-facebook-marketplace
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: fb_marketplace
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-fb-marketplace']
+        failOnStartupError: false
+
+    - id: mcp-craigslist-deals
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: craigslist
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-craigslist']
+        failOnStartupError: false
+
+    - id: mcp-camelcamelcamel
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: camelcamelcamel
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-camelcamelcamel']
+        failOnStartupError: false
+
+    - id: mcp-shipstation-logistics
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.SHIPSTATION_API_KEY'
+      config:
+        serverName: shipstation
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-shipstation']
+        env:
+          SHIPSTATION_API_KEY: !!js process.env.SHIPSTATION_API_KEY || ""
+          SHIPSTATION_API_SECRET: !!js process.env.SHIPSTATION_API_SECRET || ""
+        failOnStartupError: false

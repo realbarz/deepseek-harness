@@ -1,0 +1,222 @@
+# Domain I: Central Life Management & Personal Operations
+# DeepSeek Harness Cordis Profile Overlay
+# Launch: pnpm dsh web --patch overlays/01-life-management.patch.yml
+
+- insert:
+    - id: mcp-google-calendar
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: calendar
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-google-calendar']
+        failOnStartupError: false
+
+    - id: mcp-apple-health
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: health
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-apple-health']
+        failOnStartupError: false
+
+    - id: mcp-plaid-finance
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.PLAID_CLIENT_ID'
+      config:
+        serverName: finance
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-plaid']
+        env:
+          PLAID_CLIENT_ID: !!js process.env.PLAID_CLIENT_ID || ""
+          PLAID_SECRET: !!js process.env.PLAID_SECRET || ""
+        failOnStartupError: false
+
+    - id: mcp-obsidian-notes
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.OBSIDIAN_VAULT_PATH'
+      config:
+        serverName: notes
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-obsidian']
+        env:
+          OBSIDIAN_VAULT_PATH: !!js process.env.OBSIDIAN_VAULT_PATH || process.cwd()
+        failOnStartupError: false
+
+    - id: mcp-home-assistant
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.HASS_TOKEN'
+      config:
+        serverName: home_assistant
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-home-assistant']
+        env:
+          HASS_TOKEN: !!js process.env.HASS_TOKEN || ""
+          HASS_HOST: !!js process.env.HASS_HOST || 'http://localhost:8123'
+        failOnStartupError: false
+
+    - id: mcp-telegram-comms
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.TELEGRAM_BOT_TOKEN'
+      config:
+        serverName: telegram
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-telegram']
+        env:
+          TELEGRAM_BOT_TOKEN: !!js process.env.TELEGRAM_BOT_TOKEN || ""
+        failOnStartupError: false
+
+    - id: mcp-todoist-tasks
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.TODOIST_API_TOKEN'
+      config:
+        serverName: todoist
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-todoist']
+        env:
+          TODOIST_API_TOKEN: !!js process.env.TODOIST_API_TOKEN || ""
+        failOnStartupError: false
+
+    - id: mcp-pocket-media
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: pocket
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-pocket']
+        failOnStartupError: false
+
+    - id: mcp-weather-location
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.OPENWEATHER_API_KEY'
+      config:
+        serverName: weather
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-weather']
+        env:
+          OPENWEATHER_API_KEY: !!js process.env.OPENWEATHER_API_KEY || ""
+        failOnStartupError: false
+
+    - id: mcp-1password-vault
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: vault
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-1password']
+        failOnStartupError: false
+
+    - id: mcp-garmin-connect
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: garmin
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-garmin']
+        failOnStartupError: false
+
+    - id: mcp-whoop-strap
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: whoop
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-whoop']
+        failOnStartupError: false
+
+    - id: mcp-oura-ring
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.OURA_PERSONAL_ACCESS_TOKEN'
+      config:
+        serverName: oura
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-oura']
+        env:
+          OURA_PERSONAL_ACCESS_TOKEN: !!js process.env.OURA_PERSONAL_ACCESS_TOKEN || ""
+        failOnStartupError: false
+
+    - id: mcp-notion-personal
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.NOTION_API_KEY'
+      config:
+        serverName: notion_personal
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-notion']
+        env:
+          NOTION_API_KEY: !!js process.env.NOTION_API_KEY || ""
+        failOnStartupError: false
+
+    - id: mcp-whatsapp-gateway
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: whatsapp
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-whatsapp']
+        failOnStartupError: false
+
+    - id: mcp-signal-messenger
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: signal
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-signal']
+        failOnStartupError: false
+
+    - id: mcp-google-contacts
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: google_contacts
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-google-contacts']
+        failOnStartupError: false
+
+    - id: mcp-google-photos
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: google_photos
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-google-photos']
+        failOnStartupError: false
+
+    - id: mcp-smart-groceries
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: groceries
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-groceries']
+        failOnStartupError: false
+
+    - id: mcp-habit-tracker
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: habits
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-habits']
+        failOnStartupError: false

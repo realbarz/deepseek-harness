@@ -1,0 +1,212 @@
+# Domain VII: Creative Endeavors, Generative Media & Artistic Production
+# DeepSeek Harness Cordis Profile Overlay
+# Launch: pnpm dsh web --patch overlays/07-creative-endeavor.patch.yml
+
+- insert:
+    - id: mcp-ableton-midi
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: ableton_midi
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-midi']
+        failOnStartupError: false
+
+    - id: mcp-blender-python
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: blender_3d
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-blender']
+        failOnStartupError: false
+
+    - id: mcp-figma-design
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.FIGMA_ACCESS_TOKEN'
+      config:
+        serverName: figma
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-figma']
+        env:
+          FIGMA_ACCESS_TOKEN: !!js process.env.FIGMA_ACCESS_TOKEN || ""
+        failOnStartupError: false
+
+    - id: mcp-scrivener-novel
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: manuscript
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-manuscript']
+        failOnStartupError: false
+
+    - id: mcp-unity-unreal
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: game_engine
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-game-engine']
+        failOnStartupError: false
+
+    - id: mcp-runway-gen3
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.RUNWAY_API_SECRET'
+      config:
+        serverName: runway_video
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-runway']
+        env:
+          RUNWAY_API_SECRET: !!js process.env.RUNWAY_API_SECRET || ""
+        failOnStartupError: false
+
+    - id: mcp-spotify-distribution
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: music_distro
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-music-distribution']
+        failOnStartupError: false
+
+    - id: mcp-kdp-publishing
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: kdp_publish
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-kdp']
+        failOnStartupError: false
+
+    - id: mcp-civitai-lora
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.CIVITAI_API_KEY'
+      config:
+        serverName: civitai
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-civitai']
+        env:
+          CIVITAI_API_KEY: !!js process.env.CIVITAI_API_KEY || ""
+        failOnStartupError: false
+
+    - id: mcp-unreal-metahuman
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: metahuman
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-metahuman']
+        failOnStartupError: false
+
+    - id: mcp-ink-dialogue
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: ink_narrative
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-ink']
+        failOnStartupError: false
+
+    - id: mcp-svg-vectorizer
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: svg_vector
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-vectorizer']
+        failOnStartupError: false
+
+    - id: mcp-marvelous-designer
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: virtual_fashion
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-fashion']
+        failOnStartupError: false
+
+    - id: mcp-touchdesigner-osc
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: touchdesigner
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-touchdesigner']
+        failOnStartupError: false
+
+    - id: mcp-variable-fonts
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: typography
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-typography']
+        failOnStartupError: false
+
+    - id: mcp-threejs-visualizer
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: webgl_visualizer
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-threejs']
+        failOnStartupError: false
+
+    - id: mcp-suno-udio-music
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.SUNO_API_KEY'
+      config:
+        serverName: suno_music
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-suno']
+        env:
+          SUNO_API_KEY: !!js process.env.SUNO_API_KEY || ""
+        failOnStartupError: false
+
+    - id: mcp-volumetric-nerf
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: nerf_splat
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-splatting']
+        failOnStartupError: false
+
+    - id: mcp-audio-mastering
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: audio_master
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-audio-master']
+        failOnStartupError: false
+
+    - id: mcp-webtoon-comic
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: comic_layout
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-comic']
+        failOnStartupError: false

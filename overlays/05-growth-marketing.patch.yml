@@ -1,0 +1,226 @@
+# Domain V: Growth Marketing, Social Automation & Client Relations
+# DeepSeek Harness Cordis Profile Overlay
+# Launch: pnpm dsh web --patch overlays/05-growth-marketing.patch.yml
+
+- insert:
+    - id: mcp-buffer-social
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.BUFFER_ACCESS_TOKEN'
+      config:
+        serverName: buffer
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-buffer']
+        env:
+          BUFFER_ACCESS_TOKEN: !!js process.env.BUFFER_ACCESS_TOKEN || ""
+        failOnStartupError: false
+
+    - id: mcp-substack-newsletter
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: substack
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-substack']
+        failOnStartupError: false
+
+    - id: mcp-apollo-leadgen
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.APOLLO_API_KEY'
+      config:
+        serverName: apollo
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-apollo']
+        env:
+          APOLLO_API_KEY: !!js process.env.APOLLO_API_KEY || ""
+        failOnStartupError: false
+
+    - id: mcp-google-ads
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: google_ads
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-google-ads']
+        failOnStartupError: false
+
+    - id: mcp-meta-ads
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.META_ACCESS_TOKEN'
+      config:
+        serverName: meta_ads
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-meta-ads']
+        env:
+          META_ACCESS_TOKEN: !!js process.env.META_ACCESS_TOKEN || ""
+        failOnStartupError: false
+
+    - id: mcp-hubspot-crm
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.HUBSPOT_ACCESS_TOKEN'
+      config:
+        serverName: hubspot
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-hubspot']
+        env:
+          HUBSPOT_ACCESS_TOKEN: !!js process.env.HUBSPOT_ACCESS_TOKEN || ""
+        failOnStartupError: false
+
+    - id: mcp-salesforce-crm
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: salesforce
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-salesforce']
+        failOnStartupError: false
+
+    - id: mcp-discord-community
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.DISCORD_BOT_TOKEN'
+      config:
+        serverName: discord
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-discord']
+        env:
+          DISCORD_BOT_TOKEN: !!js process.env.DISCORD_BOT_TOKEN || ""
+        failOnStartupError: false
+
+    - id: mcp-mailchimp-campaigns
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.MAILCHIMP_API_KEY'
+      config:
+        serverName: mailchimp
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-mailchimp']
+        env:
+          MAILCHIMP_API_KEY: !!js process.env.MAILCHIMP_API_KEY || ""
+        failOnStartupError: false
+
+    - id: mcp-convertkit-broadcast
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.CONVERTKIT_API_SECRET'
+      config:
+        serverName: convertkit
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-convertkit']
+        env:
+          CONVERTKIT_API_SECRET: !!js process.env.CONVERTKIT_API_SECRET || ""
+        failOnStartupError: false
+
+    - id: mcp-twitter-x-api
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.TWITTER_BEARER_TOKEN'
+      config:
+        serverName: twitter_x
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-twitter']
+        env:
+          TWITTER_BEARER_TOKEN: !!js process.env.TWITTER_BEARER_TOKEN || ""
+        failOnStartupError: false
+
+    - id: mcp-linkedin-growth
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: linkedin
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-linkedin']
+        failOnStartupError: false
+
+    - id: mcp-youtube-channel
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.YOUTUBE_API_KEY'
+      config:
+        serverName: youtube
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-youtube']
+        env:
+          YOUTUBE_API_KEY: !!js process.env.YOUTUBE_API_KEY || ""
+        failOnStartupError: false
+
+    - id: mcp-tiktok-marketing
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: tiktok
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-tiktok']
+        failOnStartupError: false
+
+    - id: mcp-reddit-community
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: reddit
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-reddit']
+        failOnStartupError: false
+
+    - id: mcp-semrush-seo
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.SEMRUSH_API_KEY'
+      config:
+        serverName: semrush
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-semrush']
+        env:
+          SEMRUSH_API_KEY: !!js process.env.SEMRUSH_API_KEY || ""
+        failOnStartupError: false
+
+    - id: mcp-intercom-chat
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.INTERCOM_ACCESS_TOKEN'
+      config:
+        serverName: intercom
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-intercom']
+        env:
+          INTERCOM_ACCESS_TOKEN: !!js process.env.INTERCOM_ACCESS_TOKEN || ""
+        failOnStartupError: false
+
+    - id: mcp-zendesk-support
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: zendesk
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-zendesk']
+        failOnStartupError: false
+
+    - id: mcp-trustpilot-reviews
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: trustpilot
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-trustpilot']
+        failOnStartupError: false
+
+    - id: mcp-loom-video-share
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: loom
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-loom']
+        failOnStartupError: false
