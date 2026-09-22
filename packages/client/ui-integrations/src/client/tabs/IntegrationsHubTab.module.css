@@ -1,0 +1,227 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  height: 100%;
+  padding: 16px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  color: var(--dsw-alias-label-primary);
+  font-family: inherit;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.title {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0;
+  color: var(--dsw-alias-label-primary);
+}
+
+.summaryBadge {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 12px;
+  background: var(--dsw-alias-bg-layer-3);
+  color: var(--dsw-alias-label-secondary);
+  border: 0.5px solid var(--dsw-alias-border-l3);
+}
+
+.searchWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 10px;
+  pointer-events: none;
+  color: var(--dsw-alias-label-tertiary);
+}
+
+.searchInput {
+  width: 100%;
+  height: 32px;
+  border: 0.5px solid var(--dsw-alias-border-l4);
+  border-radius: 8px;
+  padding: 0 12px 0 32px;
+  outline: none;
+  background: var(--dsw-alias-bg-layer-2);
+  color: var(--dsw-alias-label-primary);
+  font: inherit;
+  font-size: 12px;
+  transition: border-color 0.15s ease;
+}
+
+.searchInput:focus {
+  border-color: var(--dsw-alias-border-focus);
+}
+
+.domainPillRow {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: none;
+}
+
+.domainPillRow::-webkit-scrollbar {
+  display: none;
+}
+
+.domainPill {
+  flex-shrink: 0;
+  border: 0.5px solid var(--dsw-alias-border-l3);
+  border-radius: 6px;
+  padding: 4px 10px;
+  background: var(--dsw-alias-bg-layer-2);
+  color: var(--dsw-alias-label-secondary);
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.domainPill:hover {
+  background: var(--dsw-alias-bg-layer-3);
+  color: var(--dsw-alias-label-primary);
+}
+
+.domainPillActive {
+  background: var(--dsw-alias-bg-layer-4);
+  color: var(--dsw-alias-label-primary);
+  border-color: var(--dsw-alias-border-l1);
+  font-weight: 600;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 8px;
+  background: var(--dsw-alias-bg-layer-2);
+  border: 0.5px solid var(--dsw-alias-border-l4);
+  transition: border-color 0.15s ease;
+}
+
+.card:hover {
+  border-color: var(--dsw-alias-border-l2);
+}
+
+.cardTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.cardTitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--dsw-alias-label-primary);
+  margin: 0;
+}
+
+.cardBadge {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: var(--dsw-alias-bg-layer-3);
+  color: var(--dsw-alias-label-tertiary);
+  border: 0.5px solid var(--dsw-alias-border-l4);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cardDescription {
+  font-size: 12px;
+  line-height: 17px;
+  color: var(--dsw-alias-label-secondary);
+  margin: 0;
+}
+
+.toolsRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.toolChip {
+  font-family: var(--dsw-font-code, monospace);
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: var(--dsw-alias-bg-layer-1);
+  color: var(--dsw-alias-label-secondary);
+  border: 0.5px solid var(--dsw-alias-border-l4);
+}
+
+.cardActions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 6px;
+  border-top: 0.5px solid var(--dsw-alias-border-l4);
+}
+
+.envIndicator {
+  font-size: 10px;
+  color: var(--dsw-alias-label-tertiary);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.triggerBtn {
+  border: 0.5px solid var(--dsw-alias-border-l3);
+  border-radius: 6px;
+  padding: 4px 8px;
+  background: var(--dsw-alias-bg-layer-3);
+  color: var(--dsw-alias-label-primary);
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.15s ease;
+}
+
+.triggerBtn:hover {
+  background: var(--dsw-alias-bg-layer-4);
+  border-color: var(--dsw-alias-border-l2);
+}
+
+.emptyState {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 0;
+  font-size: 13px;
+  color: var(--dsw-alias-label-tertiary);
+}

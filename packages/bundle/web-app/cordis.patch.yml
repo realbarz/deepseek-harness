@@ -243,6 +243,14 @@
     - id: ui-sidebar-files
       name: '@deepseek-ai/dsh-client-ui-sidebar-files'
 
+    # Right Sidebar Integrations Hub for the 140 capabilities.
+    - id: ui-integrations
+      name: '@deepseek-ai/dsh-client-ui-integrations'
+
+    # Right Sidebar Live Workspace telemetry & monitoring tab.
+    - id: ui-live-workspace
+      name: '@deepseek-ai/dsh-client-ui-live-workspace'
+
     - id: ui-settings
       name: '@deepseek-ai/dsh-client-ui-settings'
 
