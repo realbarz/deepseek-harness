@@ -1,0 +1,233 @@
+# Domain VI: AI Infrastructure, Multimodal Perception & Knowledge Graphs
+# DeepSeek Harness Cordis Profile Overlay
+# Launch: pnpm dsh web --patch overlays/06-ai-multimodal-infra.patch.yml
+
+- insert:
+    - id: mcp-brave-search
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.BRAVE_API_KEY'
+      config:
+        serverName: brave_search
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-brave-search']
+        env:
+          BRAVE_API_KEY: !!js process.env.BRAVE_API_KEY || ""
+        failOnStartupError: false
+
+    - id: mcp-pinecone-vector
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.PINECONE_API_KEY'
+      config:
+        serverName: pinecone
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-pinecone']
+        env:
+          PINECONE_API_KEY: !!js process.env.PINECONE_API_KEY || ""
+        failOnStartupError: false
+
+    - id: mcp-qdrant-vector
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.QDRANT_URL'
+      config:
+        serverName: qdrant
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-qdrant']
+        env:
+          QDRANT_URL: !!js process.env.QDRANT_URL || 'http://localhost:6333'
+          QDRANT_API_KEY: !!js process.env.QDRANT_API_KEY || ""
+        failOnStartupError: false
+
+    - id: mcp-redis-cache
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.REDIS_URL'
+      config:
+        serverName: redis
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-redis']
+        env:
+          REDIS_URL: !!js process.env.REDIS_URL || 'redis://localhost:6379'
+        failOnStartupError: false
+
+    - id: mcp-firecrawl-scrape
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.FIRECRAWL_API_KEY'
+      config:
+        serverName: firecrawl
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-firecrawl']
+        env:
+          FIRECRAWL_API_KEY: !!js process.env.FIRECRAWL_API_KEY || ""
+        failOnStartupError: false
+
+    - id: mcp-neo4j-graph
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.NEO4J_URI'
+      config:
+        serverName: neo4j
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-neo4j']
+        env:
+          NEO4J_URI: !!js process.env.NEO4J_URI || 'bolt://localhost:7687'
+          NEO4J_USERNAME: !!js process.env.NEO4J_USERNAME || 'neo4j'
+          NEO4J_PASSWORD: !!js process.env.NEO4J_PASSWORD || ""
+        failOnStartupError: false
+
+    - id: mcp-langsmith-tracing
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.LANGSMITH_API_KEY'
+      config:
+        serverName: langsmith
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-langsmith']
+        env:
+          LANGSMITH_API_KEY: !!js process.env.LANGSMITH_API_KEY || ""
+        failOnStartupError: false
+
+    - id: mcp-openrouter-gateway
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.OPENROUTER_API_KEY'
+      config:
+        serverName: openrouter
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-openrouter']
+        env:
+          OPENROUTER_API_KEY: !!js process.env.OPENROUTER_API_KEY || ""
+        failOnStartupError: false
+
+    - id: mcp-litellm-proxy
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: litellm
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-litellm']
+        failOnStartupError: false
+
+    - id: mcp-elevenlabs-voice
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.ELEVENLABS_API_KEY'
+      config:
+        serverName: elevenlabs
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-elevenlabs']
+        env:
+          ELEVENLABS_API_KEY: !!js process.env.ELEVENLABS_API_KEY || ""
+        failOnStartupError: false
+
+    - id: mcp-whisper-transcribe
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: whisper
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-whisper']
+        failOnStartupError: false
+
+    - id: mcp-midjourney-dalle
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: image_gen
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-image-gen']
+        failOnStartupError: false
+
+    - id: mcp-document-ai
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: document_ai
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-document-ai']
+        failOnStartupError: false
+
+    - id: mcp-vision-ocr
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: vision_ocr
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-vision-ocr']
+        failOnStartupError: false
+
+    - id: mcp-huggingface-hub
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.HF_TOKEN'
+      config:
+        serverName: huggingface
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-huggingface']
+        env:
+          HF_TOKEN: !!js process.env.HF_TOKEN || ""
+        failOnStartupError: false
+
+    - id: mcp-browserbase-cloud
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.BROWSERBASE_API_KEY'
+      config:
+        serverName: browserbase
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-browserbase']
+        env:
+          BROWSERBASE_API_KEY: !!js process.env.BROWSERBASE_API_KEY || ""
+        failOnStartupError: false
+
+    - id: mcp-temporal-workflow
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: temporal
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-temporal']
+        failOnStartupError: false
+
+    - id: mcp-chroma-vector
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: chroma
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-chroma']
+        failOnStartupError: false
+
+    - id: mcp-tavily-search
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.TAVILY_API_KEY'
+      config:
+        serverName: tavily
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-tavily']
+        env:
+          TAVILY_API_KEY: !!js process.env.TAVILY_API_KEY || ""
+        failOnStartupError: false
+
+    - id: mcp-cohere-rerank
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.COHERE_API_KEY'
+      config:
+        serverName: cohere_rerank
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-cohere']
+        env:
+          COHERE_API_KEY: !!js process.env.COHERE_API_KEY || ""
+        failOnStartupError: false

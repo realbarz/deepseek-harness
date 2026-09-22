@@ -3,6 +3,7 @@ CLAUDE.local.md
 apps/desktop/.env.windows
 apps/desktop/.env.macos
 apps/desktop/*.p12
+.dsh-ollama*/
 node_modules/
 lib/
 *.tsbuildinfo
@@ -49,3 +50,8 @@ worktrees/
 native/system/test/bin/
 .pnpm-store-win/
 .pnpm-store-debian/
+.kilo/
+.dsh-ollama/
+.dsh-ollama-clean/
+.dsh-ollama-gif/
+.dsh-ollama-test/

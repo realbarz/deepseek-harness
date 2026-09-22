@@ -1,0 +1,227 @@
+# Domain IV: Enterprise Operations, Cloud Infrastructure & DevOps
+# DeepSeek Harness Cordis Profile Overlay
+# Launch: pnpm dsh web --patch overlays/04-enterprise-devops.patch.yml
+
+- insert:
+    - id: mcp-github-org
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!(process.env.GITHUB_TOKEN || process.env.GH_TOKEN)'
+      config:
+        serverName: github
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-github']
+        env:
+          GITHUB_PERSONAL_ACCESS_TOKEN: !!js process.env.GITHUB_TOKEN || process.env.GH_TOKEN || ""
+        failOnStartupError: false
+
+    - id: mcp-gitlab-ci
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.GITLAB_TOKEN'
+      config:
+        serverName: gitlab
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-gitlab']
+        env:
+          GITLAB_PERSONAL_ACCESS_TOKEN: !!js process.env.GITLAB_TOKEN || ""
+        failOnStartupError: false
+
+    - id: mcp-pagerduty
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.PAGERDUTY_API_KEY'
+      config:
+        serverName: pagerduty
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-pagerduty']
+        env:
+          PAGERDUTY_API_KEY: !!js process.env.PAGERDUTY_API_KEY || ""
+        failOnStartupError: false
+
+    - id: mcp-docker-engine
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: docker
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-docker']
+        failOnStartupError: false
+
+    - id: mcp-kubernetes-cluster
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: kubernetes
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-kubernetes']
+        failOnStartupError: false
+
+    - id: mcp-sentry-apm
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.SENTRY_AUTH_TOKEN'
+      config:
+        serverName: sentry
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-sentry']
+        env:
+          SENTRY_AUTH_TOKEN: !!js process.env.SENTRY_AUTH_TOKEN || ""
+        failOnStartupError: false
+
+    - id: mcp-datadog-metrics
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.DATADOG_API_KEY'
+      config:
+        serverName: datadog
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-datadog']
+        env:
+          DATADOG_API_KEY: !!js process.env.DATADOG_API_KEY || ""
+          DATADOG_APP_KEY: !!js process.env.DATADOG_APP_KEY || ""
+        failOnStartupError: false
+
+    - id: mcp-aws-s3-storage
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.AWS_ACCESS_KEY_ID'
+      config:
+        serverName: aws_s3
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-aws-s3']
+        env:
+          AWS_ACCESS_KEY_ID: !!js process.env.AWS_ACCESS_KEY_ID || ""
+          AWS_SECRET_ACCESS_KEY: !!js process.env.AWS_SECRET_ACCESS_KEY || ""
+        failOnStartupError: false
+
+    - id: mcp-aws-lambda
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: aws_lambda
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-aws-lambda']
+        failOnStartupError: false
+
+    - id: mcp-cloudflare-edge
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.CLOUDFLARE_API_TOKEN'
+      config:
+        serverName: cloudflare
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-cloudflare']
+        env:
+          CLOUDFLARE_API_TOKEN: !!js process.env.CLOUDFLARE_API_TOKEN || ""
+        failOnStartupError: false
+
+    - id: mcp-sonarqube-audit
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: sonarqube
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-sonarqube']
+        failOnStartupError: false
+
+    - id: mcp-postman-openapi
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.POSTMAN_API_KEY'
+      config:
+        serverName: postman
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-postman']
+        env:
+          POSTMAN_API_KEY: !!js process.env.POSTMAN_API_KEY || ""
+        failOnStartupError: false
+
+    - id: mcp-jira-enterprise
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.JIRA_API_TOKEN'
+      config:
+        serverName: jira
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-jira']
+        env:
+          JIRA_API_TOKEN: !!js process.env.JIRA_API_TOKEN || ""
+          JIRA_HOST: !!js process.env.JIRA_HOST || ""
+        failOnStartupError: false
+
+    - id: mcp-confluence-wiki
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: confluence
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-confluence']
+        failOnStartupError: false
+
+    - id: mcp-terraform-iac
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: terraform
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-terraform']
+        failOnStartupError: false
+
+    - id: mcp-vault-hashicorp
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: hashicorp_vault
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-vault']
+        failOnStartupError: false
+
+    - id: mcp-grafana-dashboards
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: grafana
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-grafana']
+        failOnStartupError: false
+
+    - id: mcp-elastic-search
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: elasticsearch
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-elasticsearch']
+        failOnStartupError: false
+
+    - id: mcp-nginx-proxy
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: true
+      config:
+        serverName: nginx
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-nginx']
+        failOnStartupError: false
+
+    - id: mcp-tailscale-vpn
+      name: '@deepseek-ai/dsh-mcp-client'
+      disabled: !!js '!process.env.TAILSCALE_API_KEY'
+      config:
+        serverName: tailscale
+        transport: stdio
+        command: npx
+        args: ['-y', '@modelcontextprotocol/server-tailscale']
+        env:
+          TAILSCALE_API_KEY: !!js process.env.TAILSCALE_API_KEY || ""
+        failOnStartupError: false
